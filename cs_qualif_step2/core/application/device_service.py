@@ -1,5 +1,7 @@
 import hashlib
+from xml.dom import NotFoundErr
 
+from cs_qualif_step2.core.application.dto.personalised_config import PersonalizedDeviceConfig
 from cs_qualif_step2.core.domain.device.device_repository import DeviceRepository
 from cs_qualif_step2.core.application.dto.device_config import DeviceConfig
 from cs_qualif_step2.core.domain.device.devicefactory import DeviceFactory
@@ -22,3 +24,9 @@ class DeviceService:
         self.device_repository.save(device)
 
         return str(device.get_device_id())
+
+    def get_config(self, device_id: str) -> PersonalizedDeviceConfig:
+        device = self.device_repository.find_by_id(device_id)
+        if device is None:
+            raise NotFoundErr("Device not found")
+        return PersonalizedDeviceConfig()
